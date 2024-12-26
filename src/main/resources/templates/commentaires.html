@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Commentaires</title>
+</head>
+<body>
+<h1>Commentaires</h1>
+<ul>
+  <li th:each="commentaire : ${commentaires}">
+    <p><strong th:text="${commentaire.auteur}"></strong> - <span th:text="${#dates.format(commentaire.date, 'dd-MM-yyyy')}"></span></p>
+    <p th:text="${commentaire.contenu}"></p>
+  </li>
+</ul>
+<a th:href="@{/commentaires/ajouter/{newsId}(newsId=${newsId})}">Ajouter un Commentaire</a>
+</body>
+</html>

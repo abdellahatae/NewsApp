@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des Utilisateurs</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* Changement de couleur au survol */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Couleur de fond pour les lignes paires */
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff; /* Couleur de fond pour les lignes impaires */
+        }
+    </style>
+</head>
+<body>
+<h1>Liste des Utilisateurs</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Login</th>
+    <th>Password</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="utilisateur : ${utilisateurs}">
+    <td th:text="${utilisateur.nom}"></td>
+    <td th:text="${utilisateur.prenom}"></td>
+    <td th:text="${utilisateur.login}"></td>
+    <td th:text="${utilisateur.password}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

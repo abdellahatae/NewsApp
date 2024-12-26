@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Liste des News</title>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+            transform: scale(1.05); /* Légère augmentation de la taille au survol */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        .reaction-buttons {
+            margin-top: 10px;
+        }
+
+        .reaction-buttons button {
+            margin-right: 5px;
+            background-color: #007bff; /* Couleur de base pour les boutons de réaction */
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .reaction-buttons button:hover {
+            background-color: #0056b3; /* Couleur au survol */
+            transform: scale(1.05); /* Légère augmentation de la taille au survol */
+        }
+
+        .comment-button {
+            background-color: #28a745; /* Couleur pour le bouton de commentaire */
+        }
+
+        .comment-button:hover {
+            background-color: #218838; /* Couleur au survol */
+        }
+
+        .comment-button a {
+            color: white;
+            text-decoration: none;
+        }
+        </style>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userLogin = localStorage.getItem('userLogin');
+            if (userLogin) {
+                document.getElementById('welcome').textContent = `Bienvenue, ${userLogin}!`;
+                console.log(userLogin);
+                // Injecter le login dans le bouton
+                document.getElementById('myNewsButton').href = `/news/mynews?login=${userLogin}`;
+            } else {
+                window.location.href = '/connexion'; // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+            }
+        });
+       </script>
+    </head>
+<body>
+<h1 id="welcome">Bienvenue, utilisateur!</h1>
+
+<h1>Liste des News</h1>
+<div class="button-container">
+    <button><a href="/news"> Tous les News </a></button>
+    <button><a id="myNewsButton" href="#"> Mon News </a></button>
+    <button><a href="/news/ajouter"> + News </a></button>
+    <button><a href="/utilisateurs"> Utilisateurs </a></button>
+    <form action="/news/search" method="get">
+        <input type="text" name="author" placeholder="Entrez le nom de l'auteur" required>
+        <button type="submit">Rechercher </button>
+    </form>
+</div>
+
+<div th:if="${newsList}">
+    <ul>
+        <li th:each="news : ${newsList}">
+            <p th:text="${news.titre}"></p>
+            <p>Ajouté par : <span th:text="${news.auteur}"></span></p>
+            <p>Contenu : <span th:text="${news.contenu}"></span></p>
+            <p>Likes : <span th:text="${news.likes}"></span> - Dislikes : <span th:text="${news.dislikes}"></span></p>
+            <div class="reaction-buttons">
+                <form th:action="@{/news/{id}/reaction(id=${news.id})}" method="post" style="display:inline;">
+                    <button type="submit" name="action" value="like">Like</button>
+                    <button type="submit" name="action" value="dislike">Dislike</button>
+                </form>
+                <button class="comment-button">
+                    <a th:href="@{/commentaires/ajouter/add(newsId=${news.id})}">Commentaire</a>
+                </button>
+            </div>
+            <div class="commentaires">
+                <h3>Commentaires:</h3>
+                <ul>
+                    <li th:each="commentaire : ${news.commentaires}">
+                        <p th:text="${commentaire.contenu}"></p>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ajouter une News</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical; /* Permet de redimensionner verticalement */
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        p {
+            color: red;
+            text-align: center;
+        }
+    </style>
+  <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userLogin = localStorage.getItem('userLogin');
+            if (userLogin) {
+                document.getElementById('auteur').value = `${userLogin}`; // Utiliser value au lieu de textContent
+                document.getElementById('welcome').textContent = `Bienvenue, ${userLogin}`;
+            } else {
+                window.location.href = '/connexion'; // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+            }
+        });
+    </script>
+</head>
+<body>
+<h1 id="welcome">Bienvenue, utilisateur!</h1>
+<h1>Ajouter une News</h1>
+<form th:action="@{/news/ajouter}" th:object="${news}" method="post">
+  <label for="url">URL:</label>
+  <input type="text" id="url" name="url" required>
+
+  <!--<label for="auteur">Auteur:</label>-->
+  <input type="hidden" id="auteur" name="auteur" required>
+
+  <label for="titre">Titre:</label>
+  <input type="text" id="titre" name="titre" required>
+
+  <label for="contenu">Contenu News:</label>
+  <textarea id="contenu" name="contenu" required></textarea>
+
+  <button type="submit">Ajouter la News</button>
+</form>
+<p th:if="${erreur}" th:text="${erreur}"></p>
+</body>
+</html>
